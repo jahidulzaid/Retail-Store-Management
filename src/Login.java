@@ -1,5 +1,7 @@
 
+import dba.ConnectionProvider;
 import javax.swing.JOptionPane;
+import java.sql.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -40,7 +42,6 @@ public class Login extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -116,6 +117,28 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        
+        int tmp = 0;
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs =  st.executeQuery("select * from appuser where email = '"+email+"' and password = '"+password+"' and status = 'Active'");
+            while(rs.next()){
+                tmp = 1;
+                setVisible(false);
+                //home
+                new Home(rs.getString("userRole")).setVisible(true);
+            }
+            if(tmp == 0){
+                JOptionPane.showMessageDialog(null, "Incorrect Email or Password");
+            }
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
