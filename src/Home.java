@@ -17,6 +17,7 @@ public class Home extends javax.swing.JFrame {
      */
     public Home() {
         initComponents();
+        setLocationRelativeTo(null);
     }
     public Home(String role) {
         initComponents();
@@ -112,6 +113,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
         // TODO add your handling code here:
+        new ManageUser().setVisible(true);
         
     }//GEN-LAST:event_btnUserActionPerformed
 

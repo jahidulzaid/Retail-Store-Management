@@ -1,8 +1,10 @@
 
 import dba.ConnectionProvider;
+import java.awt.Color;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -14,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ManageUser extends javax.swing.JFrame {
 
-    private int appuserpk = 0;
+    private int appuserPk = 0;
 
     /**
      * Creates new form ManageUser
@@ -77,6 +79,7 @@ public class ManageUser extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Users.png"))); // NOI18N
         jLabel1.setText("Manage User Role");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, 440, 50));
 
@@ -91,41 +94,46 @@ public class ManageUser extends javax.swing.JFrame {
                 "ID", "Name", "Phone", "Email", "Address", "Status"
             }
         ));
+        tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableUserMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tableUser);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, -1, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 130, 610, -1));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel2.setText("Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
         txtName.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, 320, -1));
+        getContentPane().add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 320, -1));
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel3.setText("Phone Number");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         txtMobileNumber.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, 320, -1));
+        getContentPane().add(txtMobileNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 320, -1));
 
         jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel4.setText("Email");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 320, -1));
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 320, -1));
 
         jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel5.setText("Address");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 290, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, -1, -1));
 
         txtAddress.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 310, 320, 60));
+        getContentPane().add(txtAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 320, 60));
 
         jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel6.setText("Status");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 440, -1, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, -1, -1));
 
         ComboBoxStatus.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         ComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
@@ -134,23 +142,38 @@ public class ManageUser extends javax.swing.JFrame {
                 ComboBoxStatusActionPerformed(evt);
             }
         });
-        getContentPane().add(ComboBoxStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 460, 320, -1));
+        getContentPane().add(ComboBoxStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 450, 320, -1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel7.setText("Password");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 380, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, -1, -1));
 
         txtPassword.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
-        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 400, 320, -1));
+        getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 320, -1));
 
         btnUpdate.setText("Update");
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 510, -1, -1));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 500, -1, -1));
 
         btnReset.setText("Reset");
-        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 510, -1, -1));
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 500, -1, -1));
 
         btnClose.setText("Close");
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 510, -1, -1));
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 500, -1, -1));
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -158,7 +181,7 @@ public class ManageUser extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, -1, -1));
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 500, -1, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/manageUser.jpg"))); // NOI18N
         jLabel8.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -166,7 +189,7 @@ public class ManageUser extends javax.swing.JFrame {
                 jLabel8ComponentShown(evt);
             }
         });
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(-70, 30, 1040, 660));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1040, 660));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -201,8 +224,125 @@ public class ManageUser extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        
+        String name = txtName.getText();
+        String mobileNumber = txtMobileNumber.getText();
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        String address = txtAddress.getText();
+        String status = (String) ComboBoxStatus.getSelectedItem();
+
+        if (validateFields("new")) {
+            JOptionPane.showMessageDialog(null, "All fields are requied...");
+
+        } else {
+            try {
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("insert into appuser (userRole, name, mobileNumber, email, password, address, status) values('Admin',?,?,?, ?,?,?)");
+                ps.setString(1, name);
+                ps.setString(2, mobileNumber);
+                ps.setString(3, email);
+                ps.setString(4, password);
+                ps.setString(5, address);
+                ps.setString(6, status);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "User Added Successfully...");
+                setVisible(false);
+                new ManageUser().setVisible(true);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+
+
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
+        // TODO add your handling code here:
+        int index = tableUser.getSelectedRow();
+        TableModel model = tableUser.getModel();
+
+        String id = model.getValueAt(index, 0).toString();
+        appuserPk = Integer.parseInt(id);
+
+        String name = model.getValueAt(index, 1).toString();
+        txtName.setText(name);
+
+        String mobileNumber = model.getValueAt(index, 2).toString();
+        txtMobileNumber.setText(mobileNumber);
+
+        String email = model.getValueAt(index, 3).toString();
+        txtEmail.setText(email);
+
+        String address = model.getValueAt(index, 4).toString();
+        txtAddress.setText(address);
+
+        String status = model.getValueAt(index, 5).toString();
+        ComboBoxStatus.removeAllItems();
+        if (status.equals("Active")) {
+            ComboBoxStatus.addItem("Active");
+            ComboBoxStatus.addItem("Inactive");
+        } else {
+            ComboBoxStatus.addItem("Inactive");
+            ComboBoxStatus.addItem("Active");
+        }
+
+        txtPassword.setEditable(false);
+        txtPassword.setBackground(Color.red);
+
+        btnSave.setEnabled(false);
+        btnUpdate.setEnabled(true);
+
+
+    }//GEN-LAST:event_tableUserMouseClicked
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+
+        String name = txtName.getText();
+        String mobileNumber = txtMobileNumber.getText();
+        String email = txtEmail.getText();
+        String address = txtAddress.getText();
+        String status = (String) ComboBoxStatus.getSelectedItem();
+
+        if (validateFields("edit")) {
+            JOptionPane.showMessageDialog(null, "All fields are requied...");
+
+        } else {
+            try {
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("update appuser set name=?, mobileNumber=?, email=?, address=?, status=? where appuser_pk=?");
+                ps.setString(1, name);
+                ps.setString(2, mobileNumber);
+                ps.setString(3, email);
+                ps.setString(4, address);
+                ps.setString(5, status);
+                ps.setInt(6, appuserPk);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "User Updated Successfully...");
+                setVisible(false);
+                new ManageUser().setVisible(true);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new ManageUser().setVisible(true);
+        
+        
+        
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
