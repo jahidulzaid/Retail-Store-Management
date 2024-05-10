@@ -37,13 +37,15 @@ public class tables {
 "    '123 Kanchan, Vulta, Rupgonj',\n" +
 "    'Active'\n" +
 ");");
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, "Table Created Successfully");
             
             
             
             
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
+        
         finally{
             try {
                con.close();
