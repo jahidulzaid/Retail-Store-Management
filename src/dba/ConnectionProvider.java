@@ -13,7 +13,7 @@ public class ConnectionProvider {
     public static Connection getCon(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/crm";
+            String url = "jdbc:mysql://localhost:3306/retail_store_crm";
             String user = "root";
             String pass = "";
             
