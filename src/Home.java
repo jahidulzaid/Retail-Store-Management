@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -17,7 +20,10 @@ public class Home extends javax.swing.JFrame {
     }
     public Home(String role) {
         initComponents();
-        System.out.println(role);
+        setLocationRelativeTo(null);
+        if(role.equals("Admin")){
+            btnUser.setVisible(false);
+        }
     }
 
     /**
@@ -29,13 +35,13 @@ public class Home extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        btnUser = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
@@ -43,15 +49,15 @@ public class Home extends javax.swing.JFrame {
         setBackground(new java.awt.Color(204, 255, 204));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Users.png"))); // NOI18N
-        jButton1.setText("User Role");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnUser.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnUser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Users.png"))); // NOI18N
+        btnUser.setText("User Role");
+        btnUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnUserActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, -1, -1));
+        getContentPane().add(btnUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/category.png"))); // NOI18N
@@ -83,10 +89,15 @@ public class Home extends javax.swing.JFrame {
         jButton6.setText("View Order");
         getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, -1, -1));
 
-        jButton7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Exit.png"))); // NOI18N
-        jButton7.setText("Logout");
-        getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
+        btnLogout.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        btnLogout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Exit.png"))); // NOI18N
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
 
         jButton10.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/customers.png"))); // NOI18N
@@ -99,13 +110,23 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUserActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+    }//GEN-LAST:event_btnUserActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        int a = JOptionPane.showConfirmDialog(null, "Do you want to log out from the application", "Select", JOptionPane.YES_NO_OPTION);
+        if(a == 0){
+            setVisible(false);
+            new Login().setVisible(true);
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
 
     /**
      * @param args the command line arguments
@@ -143,14 +164,14 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnLogout;
+    private javax.swing.JButton btnUser;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
