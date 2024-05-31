@@ -1,6 +1,17 @@
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import common.OpenPdf;
 import dba.ConnectionProvider;
+import dba.RetailStoreFiles;
+import java.io.FileOutputStream;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -14,9 +25,10 @@ import javax.swing.table.TableModel;
  * @author Jahid
  */
 public class ManageOrder extends javax.swing.JFrame {
-    
+
     private int customer_sl = 0;
     private int product_sl = 0;
+    private int customer_fk = 0;
     private int finalTotalPrice = 0;
     private String orderId = "";
 
@@ -27,7 +39,7 @@ public class ManageOrder extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
     }
-    
+
     private void clearProductFields() {
         product_sl = 0;
         txtProductName.setText("");
@@ -35,7 +47,7 @@ public class ManageOrder extends javax.swing.JFrame {
         txtProductDescription.setText("");
         txtOrderQuantity.setText("");
     }
-    
+
     public String getUniqueId(String prefix) {
         return prefix + System.nanoTime();
     }
@@ -74,7 +86,7 @@ public class ManageOrder extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         btnClose = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
+        btnSaveOrderDetails = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -121,7 +133,7 @@ public class ManageOrder extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Name", "Quantity", "Price", "Description", "Category ID", "Category Name"
+                "ID", "Name", "Price", "Quantity", "Description", "Category ID", "Category Name"
             }
         ));
         tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -137,7 +149,6 @@ public class ManageOrder extends javax.swing.JFrame {
         lblFinalTotalPrice.setText("00000");
         getContentPane().add(lblFinalTotalPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 520, -1, -1));
 
-        tableCart.setAutoCreateRowSorter(true);
         tableCart.setBackground(new java.awt.Color(231, 230, 230));
         tableCart.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tableCart.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
@@ -210,6 +221,11 @@ public class ManageOrder extends javax.swing.JFrame {
 
         txtProductPrice.setBackground(new java.awt.Color(235, 232, 232));
         txtProductPrice.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
+        txtProductPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtProductPriceActionPerformed(evt);
+            }
+        });
         getContentPane().add(txtProductPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 610, 320, -1));
 
         jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -244,15 +260,15 @@ public class ManageOrder extends javax.swing.JFrame {
         });
         getContentPane().add(btnReset, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 640, 220, 40));
 
-        btnSave.setBackground(new java.awt.Color(204, 204, 204));
-        btnSave.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnSave.setText("Save Order Details");
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveOrderDetails.setBackground(new java.awt.Color(204, 204, 204));
+        btnSaveOrderDetails.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnSaveOrderDetails.setText("Save Order Details");
+        btnSaveOrderDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
+                btnSaveOrderDetailsActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 570, 220, 40));
+        getContentPane().add(btnSaveOrderDetails, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 570, 220, 40));
 
         jLabel11.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel11.setText("Selected Product");
@@ -295,16 +311,16 @@ public class ManageOrder extends javax.swing.JFrame {
         // TODO add your handling code here:
         int index = tableCustomer.getSelectedRow();
         TableModel model = tableCustomer.getModel();
-        
+
         String id = model.getValueAt(index, 0).toString();
         customer_sl = Integer.parseInt(id);
-        
+
         String name = model.getValueAt(index, 1).toString();
         txtCustomerName.setText(name);
-        
+
         String mobileNumber = model.getValueAt(index, 2).toString();
         txtCustomerMobileNumber.setText(mobileNumber);
-        
+
         String email = model.getValueAt(index, 3).toString();
         txtCustomerEmail.setText(email);
 
@@ -316,13 +332,13 @@ public class ManageOrder extends javax.swing.JFrame {
         TableModel model = tableProduct.getModel();
         String id = model.getValueAt(index, 0).toString();
         product_sl = Integer.parseInt(id);
-        
+
         String productName = model.getValueAt(index, 1).toString();
         txtProductName.setText(productName);
-        
+
         String productPrice = model.getValueAt(index, 2).toString();
         txtProductPrice.setText(productPrice);
-        
+
         String productDescription = model.getValueAt(index, 4).toString();
         txtProductDescription.setText(productDescription);
 
@@ -333,6 +349,16 @@ public class ManageOrder extends javax.swing.JFrame {
 
     private void tableCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCartMouseClicked
         // TODO add your handling code here:
+
+        int index = tableCart.getSelectedRow();
+        int a = JOptionPane.showConfirmDialog(null, "Do you want to remove this product?", "Select", JOptionPane.YES_NO_OPTION);
+        if (a == 0) {
+            TableModel model = tableCart.getModel();
+            String subTotal = model.getValueAt(index, 5).toString();
+            finalTotalPrice = finalTotalPrice - Integer.parseInt(subTotal);
+            lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
+            ((DefaultTableModel) tableCart.getModel()).removeRow(index);
+        }
     }//GEN-LAST:event_tableCartMouseClicked
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -346,44 +372,115 @@ public class ManageOrder extends javax.swing.JFrame {
         new ManageOrder().setVisible(true);
     }//GEN-LAST:event_btnResetActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+    private void btnSaveOrderDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveOrderDetailsActionPerformed
         // TODO add your handling code here:
-        String name = txtCustomerName.getText();
-        String mobileNumber = txtCustomerMobileNumber.getText();
-        String email = txtCustomerEmail.getText();
-        
-        if (validateFields()) {
-            JOptionPane.showMessageDialog(null, "All fields are requied...");
-            
-        } else {
+        if (finalTotalPrice != 0 && !txtCustomerName.getText().equals("")) {
+            orderId = getUniqueId("Bill-");
+
+            DefaultTableModel dtm = (DefaultTableModel) tableCart.getModel();
+            if (tableCart.getRowCount() != 0) {
+                for (int i = 0; i < tableCart.getRowCount(); i++) {
+                    try {
+                        Connection con = ConnectionProvider.getCon();
+                        Statement st = con.createStatement();
+                        st.executeQuery("update product set quantity=quantity-" + Integer.parseInt(dtm.getValueAt(i, 2).toString()) + " where product_sl=" + Integer.parseInt(dtm.getValueAt(i, 0).toString()));
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, e);
+                    }
+                }
+            }
             try {
+                SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Calendar cal = Calendar.getInstance();
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into customer (name, mobileNumber, email) values(?,?,?)");
-                ps.setString(1, name);
-                ps.setString(2, mobileNumber);
-                ps.setString(3, email);
-                
+                PreparedStatement ps = con.prepareStatement("insert into orderDetail (orderId, customer_fk, orderDate, totalPaid) values(?,?,?,?)");
+                ps.setString(1, orderId);
+                ps.setInt(2, customer_fk);
+                ps.setString(3, myFormat.format(cal.getTime()));
+                ps.setInt(4, finalTotalPrice);
+
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "Customer Added Successfully...");
-                setVisible(false);
-                new ManageCustomer().setVisible(true);
-                
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
+
+            //pdf doc created by the following
+            com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+            try {
+                SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+                Calendar cal = Calendar.getInstance();
+                PdfWriter.getInstance(doc, new FileOutputStream(RetailStoreFiles.billPath + "" + orderId + ".pdf"));
+                doc.open();
+                Paragraph projectName = new Paragraph("                                                Retail Store Management System\n");
+                doc.add(projectName);
+                Paragraph starLine = new Paragraph("****************************************************************************************");
+                doc.add(starLine);
+                Paragraph details = new Paragraph("\tOrderID: " + orderId + "\nDate: " + myFormat.format(cal.getTime()) + "\nTotal Paid: " + finalTotalPrice);
+                doc.add(details);
+                doc.add(starLine);
+                PdfPTable tb1 = new PdfPTable(5);
+
+                PdfPCell nameCell = new PdfPCell(new Phrase("Name"));
+                PdfPCell quantityCell = new PdfPCell(new Phrase("Quantity"));
+                PdfPCell priceCell = new PdfPCell(new Phrase("Price Per Unit"));
+                PdfPCell descriptionCell = new PdfPCell(new Phrase("Description"));
+                
+                
+                PdfPCell subTotalPriceCell = new PdfPCell(new Phrase("Sub Total Price"));
+
+                BaseColor backgroundColor = new BaseColor(255, 204, 50);
+                nameCell.setBackgroundColor(backgroundColor);
+                descriptionCell.setBackgroundColor(backgroundColor);
+                priceCell.setBackgroundColor(backgroundColor);
+                quantityCell.setBackgroundColor(backgroundColor);
+                subTotalPriceCell.setBackgroundColor(backgroundColor);
+
+                tb1.addCell(nameCell);
+                tb1.addCell(descriptionCell);
+                tb1.addCell(priceCell);
+                tb1.addCell(quantityCell);
+                tb1.addCell(subTotalPriceCell);
+
+                for (int i = 0; i < tableCart.getRowCount(); i++) {
+                    tb1.addCell(tableCart.getValueAt(i, 1).toString());
+                    tb1.addCell(tableCart.getValueAt(i, 2).toString());
+                    tb1.addCell(tableCart.getValueAt(i, 3).toString());
+                    tb1.addCell(tableCart.getValueAt(i, 4).toString());
+                    tb1.addCell(tableCart.getValueAt(i, 5).toString());
+                }
+
+                doc.add(tb1);
+                doc.add(starLine);
+                Paragraph thankMsg = new Paragraph("Thank you");
+                doc.add(thankMsg);
+
+                //open pdf
+                OpenPdf.OpenById(orderId);
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+            doc.close();
+            setVisible(false);
+            new ManageOrder().setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Please add product to cart or slect customer..");
         }
-    }//GEN-LAST:event_btnSaveActionPerformed
+
+
+    }//GEN-LAST:event_btnSaveOrderDetailsActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         txtCustomerName.setEditable(false);
         txtCustomerMobileNumber.setEditable(false);
         txtCustomerEmail.setEditable(false);
-        
+
         txtProductName.setEditable(false);
         txtProductPrice.setEditable(false);
         txtProductDescription.setEditable(false);
-        
+
         DefaultTableModel customerModel = (DefaultTableModel) tableCustomer.getModel();
         DefaultTableModel productModel = (DefaultTableModel) tableProduct.getModel();
         try {
@@ -392,15 +489,15 @@ public class ManageOrder extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("SELECT * FROM customer;");
             while (rs.next()) {
                 customerModel.addRow(new Object[]{rs.getString("customer_sl"), rs.getString("name"), rs.getString("mobileNumber"), rs.getString("email")});
-                
+
             }
-            
+
             rs = st.executeQuery("SELECT * FROM product INNER JOIN category ON product.category_fk = category.category_sl;");
             while (rs.next()) {
                 productModel.addRow(new Object[]{rs.getString("product_sl"), rs.getString("name"), rs.getString("quantity"), rs.getString("price"), rs.getString("description"), rs.getString("category_fk"), rs.getString(8)});
-                
+
             }
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
@@ -411,26 +508,27 @@ public class ManageOrder extends javax.swing.JFrame {
         String noOfUnits = txtOrderQuantity.getText();
         if (!noOfUnits.equals("")) {
             String productName = txtProductName.getText();
-            String productDescription = txtProductName.getText();
-            String productPrice = txtProductName.getText();
-            
+            String productDescription = txtProductDescription.getText();
+            String productPrice = txtProductPrice.getText();
+
             int totalPrice = Integer.parseInt(txtOrderQuantity.getText()) * Integer.parseInt(productPrice);
-            
+
             int checkStock = 0;
             int checkProductAlreadyExitInCart = 0;
             try {
                 Connection con = ConnectionProvider.getCon();
                 Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM product where product_sl=" + product_sl + ";");
+                ResultSet rs = st.executeQuery("SELECT * FROM product where product_sl=" + product_sl + "");
                 while (rs.next()) {
                     if (rs.getInt("quantity") >= Integer.parseInt(noOfUnits)) {
                         checkStock = 1;
-                    } else {
+                    }
+                    else {
                         JOptionPane.showMessageDialog(null, "Product is out of stock. Only " + rs.getInt("quantity") + " left.");
                     }
-                    
+
                 }
-                
+
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
@@ -444,7 +542,7 @@ public class ManageOrder extends javax.swing.JFrame {
                         }
                     }
                 }
-                if(checkProductAlreadyExitInCart == 0){
+                if (checkProductAlreadyExitInCart == 0) {
                     model.addRow(new Object[]{product_sl, productName, noOfUnits, productPrice, productDescription, totalPrice});
                     finalTotalPrice = finalTotalPrice + totalPrice;
                     lblFinalTotalPrice.setText(String.valueOf(finalTotalPrice));
@@ -452,11 +550,15 @@ public class ManageOrder extends javax.swing.JFrame {
                 }
                 clearProductFields();
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "No of Quantity and Product field is required!");
         }
     }//GEN-LAST:event_btnAddToCartActionPerformed
+
+    private void txtProductPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProductPriceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtProductPriceActionPerformed
 
     /**
      * @param args the command line arguments
@@ -497,7 +599,7 @@ public class ManageOrder extends javax.swing.JFrame {
     private javax.swing.JButton btnAddToCart;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSaveOrderDetails;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

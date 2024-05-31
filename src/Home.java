@@ -103,6 +103,11 @@ public class Home extends javax.swing.JFrame {
         jButton6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/View-orders.png"))); // NOI18N
         jButton6.setText("View Order");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 420, -1, -1));
 
         btnLogout.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -169,6 +174,11 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         new ManageOrder().setVisible(true);
     }//GEN-LAST:event_orderActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        new ViewOrders().setVisible(true);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments

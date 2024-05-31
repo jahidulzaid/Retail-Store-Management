@@ -25,7 +25,8 @@ public class tables {
             //create table: Category
             //st.executeUpdate("CREATE TABLE category(category_sl INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(200))");
             //st.executeUpdate("CREATE TABLE product(product_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), quantity INT, price FLOAT, description VARCHAR(500), category_fk INT);");
-            st.executeUpdate("CREATE TABLE customer(customer_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200),mobileNumber VARCHAR(50), email VARCHAR(200) );");
+            //st.executeUpdate("CREATE TABLE customer(customer_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200),mobileNumber VARCHAR(50), email VARCHAR(200) );");
+            st.executeUpdate("CREATE TABLE orderDetail(order_sl INT AUTO_INCREMENT PRIMARY KEY, orderId VARCHAR(200), customer_fk int, orderDate varchar(200),totalPaid float);");
 
             JOptionPane.showMessageDialog(null, "Table Created Successfully");
 
