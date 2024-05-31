@@ -3,24 +3,26 @@ import java.sql.*;
 import dba.ConnectionProvider;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author Jahid
  */
 public class ManageCategory extends javax.swing.JFrame {
+
     private int category_sl = 0;
 
     /**
      * Creates new form ManageCategory
      */
     public ManageCategory() {
-        initComponents();setLocationRelativeTo(null);
+        initComponents();
+        setLocationRelativeTo(null);
     }
 
     private boolean validateFields() {
@@ -153,7 +155,7 @@ public class ManageCategory extends javax.swing.JFrame {
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("Select * from category");
             while (rs.next()) {
-                model.addRow(new Object[]{rs.getString("category_sl"), rs.getString("NAME")}) ;
+                model.addRow(new Object[]{rs.getString("category_sl"), rs.getString("NAME")});
             }
 
         } catch (Exception e) {
@@ -167,13 +169,45 @@ public class ManageCategory extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNameComponentShown
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-
+        String name = txtName.getText();
+        if (validateFields()) {
+            JOptionPane.showMessageDialog(null, "All fields are required!!");
+        } else {
+            try {
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("insert into category (name) value(?)");
+                ps.setString(1, name);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Category Added.");
+                setVisible(false);
+                new ManageCategory().setVisible(true);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
 
         String name = txtName.getText();
+
+        if (validateFields()) {
+            JOptionPane.showConfirmDialog(null, "All fields are required!!");
+        } else {
+            try {
+                Connection con = ConnectionProvider.getCon();
+                PreparedStatement ps = con.prepareStatement("update category set name=? where category_sl=?");
+                ps.setString(1, name);
+                ps.setInt(2, category_sl);
+                ps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Category Updated Succes...");
+                setVisible(false);
+                new ManageCategory().setVisible(true);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -189,6 +223,14 @@ public class ManageCategory extends javax.swing.JFrame {
 
     private void tableCategoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableCategoryMouseClicked
         // TODO add your handling code here:
+        int index = tableCategory.getSelectedRow();
+        TableModel model = tableCategory.getModel();
+        String id = model.getValueAt(index, 0).toString();
+        category_sl = Integer.parseInt(id);
+        String name = model.getValueAt(index, 1).toString();
+        txtName.setText(name);
+        btnSave.setEnabled(false);
+        btnUpdate.setEnabled(true);
     }//GEN-LAST:event_tableCategoryMouseClicked
 
     private void tableCategoryComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tableCategoryComponentShown
