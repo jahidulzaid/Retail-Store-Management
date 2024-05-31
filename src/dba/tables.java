@@ -13,47 +13,32 @@ import javax.swing.JOptionPane;
  * @author Jahid
  */
 public class tables {
+
     public static void main(String[] args) {
         Connection con = null;
-        Statement st   = null;
+        Statement st = null;
         try {
             con = ConnectionProvider.getCon();
-            st  = con.createStatement();
-            st.executeUpdate("INSERT INTO appuser(\n" +
-"    userRole,\n" +
-"    NAME,\n" +
-"    mobileNumber,\n" +
-"    email,\n" +
-"    password,\n" +
-"    address,\n" +
-"STATUS\n" +
-")\n" +
-"VALUES(\n" +
-"    'Admin',\n" +
-"    'Jahidul Islam',\n" +
-"    '1234567890',\n" +
-"    'jahidul@gmail.com',\n" +
-"    'password123',\n" +
-"    '123 Kanchan, Vulta, Rupgonj',\n" +
-"    'Active'\n" +
-");");
+            st = con.createStatement();
+            
+            //st.executeUpdate("INSERT INTO appuser( userRole, NAME, mobileNumber, email, password, address, STATUS) VALUES('Admin', 'Jahidul Islam', '1234567890', 'jahidul@gmail.com', 'password123',  '123 Kanchan, Vulta, Rupgonj', 'Active');");
+            
+            //create table: Category
+            //st.executeUpdate("CREATE TABLE category(category_sl INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(200))");
+            
+
             JOptionPane.showMessageDialog(null, "Table Created Successfully");
-            
-            
-            
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
-        }
-        
-        finally{
+        } finally {
             try {
-               con.close();
-               st.close();
+                con.close();
+                st.close();
             } catch (Exception e) {
             }
         }
-        
+
     }
-    
+
 }
