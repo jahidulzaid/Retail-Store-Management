@@ -26,6 +26,7 @@ public class tables {
             //create table: Category
             //st.executeUpdate("CREATE TABLE category(category_sl INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(200))");
             
+            st.executeUpdate("CREATE TABLE product(product_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), quantity INT, price FLOAT, description VARCHAR(500), category_fk INT);");
 
             JOptionPane.showMessageDialog(null, "Table Created Successfully");
 

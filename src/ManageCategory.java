@@ -103,7 +103,7 @@ public class ManageCategory extends javax.swing.JFrame {
                 btnCloseActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 370, -1, -1));
+        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 370, -1, -1));
 
         tableCategory.setBackground(new java.awt.Color(153, 255, 204));
         tableCategory.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -142,7 +142,7 @@ public class ManageCategory extends javax.swing.JFrame {
                 formComponentShown1(evt);
             }
         });
-        getContentPane().add(form, new org.netbeans.lib.awtextra.AbsoluteConstraints(-120, 0, 1040, 660));
+        getContentPane().add(form, new org.netbeans.lib.awtextra.AbsoluteConstraints(-130, -10, 1040, 660));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
