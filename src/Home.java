@@ -40,10 +40,10 @@ public class Home extends javax.swing.JFrame {
         category = new javax.swing.JButton();
         product = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        order = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        customer = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,10 +90,15 @@ public class Home extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 40, -1, -1));
 
-        jButton5.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Orders.png"))); // NOI18N
-        jButton5.setText("Sales & Order");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 340, -1, -1));
+        order.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        order.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Orders.png"))); // NOI18N
+        order.setText("Sales & Order");
+        order.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderActionPerformed(evt);
+            }
+        });
+        getContentPane().add(order, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 340, -1, -1));
 
         jButton6.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/View-orders.png"))); // NOI18N
@@ -110,10 +115,15 @@ public class Home extends javax.swing.JFrame {
         });
         getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 430, -1, -1));
 
-        jButton10.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/customers.png"))); // NOI18N
-        jButton10.setText("Customer Information");
-        getContentPane().add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, -1, -1));
+        customer.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        customer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/customers.png"))); // NOI18N
+        customer.setText("Customer Information");
+        customer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerActionPerformed(evt);
+            }
+        });
+        getContentPane().add(customer, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 120, -1, -1));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Retail-Management.jpg"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1000, 500));
@@ -149,6 +159,16 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         new ManageProduct().setVisible(true);
     }//GEN-LAST:event_productActionPerformed
+
+    private void customerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerActionPerformed
+        // TODO add your handling code here:
+        new ManageCustomer().setVisible(true);
+    }//GEN-LAST:event_customerActionPerformed
+
+    private void orderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderActionPerformed
+        // TODO add your handling code here:
+        new ManageOrder().setVisible(true);
+    }//GEN-LAST:event_orderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,11 +209,11 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnUser;
     private javax.swing.JButton category;
-    private javax.swing.JButton jButton10;
+    private javax.swing.JButton customer;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton order;
     private javax.swing.JButton product;
     // End of variables declaration//GEN-END:variables
 }

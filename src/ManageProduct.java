@@ -2,6 +2,8 @@
 import dba.ConnectionProvider;
 import javax.swing.JOptionPane;
 import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -42,7 +44,7 @@ public class ManageProduct extends javax.swing.JFrame {
     private boolean validateFields(String formType) {
         if (formType.equals("edit") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")) {
             return false;
-        } else if (formType.equals("edit") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")) {
+        } else if (formType.equals("new") && !txtName.getText().equals("") && !txtPrice.getText().equals("") && !txtDescription.getText().equals("")) {
             return false;
         } else {
             return true;
@@ -63,13 +65,13 @@ public class ManageProduct extends javax.swing.JFrame {
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableUser = new javax.swing.JTable();
+        tableProduct = new javax.swing.JTable();
         btnSave = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnReset = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
         txtQuantity = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lblQuantity = new javax.swing.JLabel();
         txtPrice = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtDescription = new javax.swing.JTextField();
@@ -101,25 +103,25 @@ public class ManageProduct extends javax.swing.JFrame {
         jLabel2.setText("Name");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
 
-        tableUser.setBackground(new java.awt.Color(153, 255, 204));
-        tableUser.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        tableUser.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
-        tableUser.setModel(new javax.swing.table.DefaultTableModel(
+        tableProduct.setBackground(new java.awt.Color(153, 255, 204));
+        tableProduct.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tableProduct.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        tableProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Name", "Phone", "Email", "Address", "Status"
+                "ID", "Name", "Quantity", "Price", "Description", "Category ID", "Category Name"
             }
         ));
-        tableUser.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tableUserMouseClicked(evt);
+                tableProductMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tableUser);
+        jScrollPane1.setViewportView(tableProduct);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 540, -1));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 120, 570, -1));
 
         btnSave.setText("Save");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -156,9 +158,9 @@ public class ManageProduct extends javax.swing.JFrame {
         txtQuantity.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         getContentPane().add(txtQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 320, -1));
 
-        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel4.setText("Quantity");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        lblQuantity.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblQuantity.setText("Quantity");
+        getContentPane().add(lblQuantity, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
 
         txtPrice.setFont(new java.awt.Font("Times New Roman", 1, 13)); // NOI18N
         getContentPane().add(txtPrice, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 320, -1));
@@ -187,52 +189,59 @@ public class ManageProduct extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tableUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableUserMouseClicked
+    private void tableProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductMouseClicked
         // TODO add your handling code here:
-        int index = tableUser.getSelectedRow();
-        TableModel model = tableUser.getModel();
-
+        int index = tableProduct.getSelectedRow();
+        TableModel model = tableProduct.getModel();
         String id = model.getValueAt(index, 0).toString();
-        appuserPk = Integer.parseInt(id);
+        product_sl = Integer.parseInt(id);
 
         String name = model.getValueAt(index, 1).toString();
         txtName.setText(name);
 
-        String mobileNumber = model.getValueAt(index, 2).toString();
-        txtMobileNumber.setText(mobileNumber);
+        String quantity = model.getValueAt(index, 2).toString();
+        totalQuantity = 0;
+        lblQuantity.setText("Add Quantity");
+        totalQuantity = Integer.parseInt(quantity);
 
-        String email = model.getValueAt(index, 3).toString();
-        txtEmail.setText(email);
+        String price = model.getValueAt(index, 3).toString();
+        txtPrice.setText(price);
 
-        String address = model.getValueAt(index, 4).toString();
-        txtAddress.setText(address);
+        String description = model.getValueAt(index, 4).toString();
+        txtDescription.setText(description);
 
-        String status = model.getValueAt(index, 5).toString();
-        ComboBoxStatus.removeAllItems();
-        if (status.equals("Active")) {
-            ComboBoxStatus.addItem("Active");
-            ComboBoxStatus.addItem("Inactive");
-        } else {
-            ComboBoxStatus.addItem("Inactive");
-            ComboBoxStatus.addItem("Active");
+        comboBoxCategory.removeAllItems();
+        String categoryId = model.getValueAt(index, 5).toString();
+        String categoryName = model.getValueAt(index, 6).toString();
+        comboBoxCategory.addItem(categoryId + " - " + categoryName);
+
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("select * from category");
+            while (rs.next()) {
+                if (Integer.parseInt(categoryId) != rs.getInt(1)) {
+                    comboBoxCategory.addItem(rs.getString("category_sl") + " - " + rs.getString("name"));
+                }
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
         }
-
-        txtPassword.setEditable(false);
-        txtPassword.setBackground(Color.red);
 
         btnSave.setEnabled(false);
         btnUpdate.setEnabled(true);
 
-    }//GEN-LAST:event_tableUserMouseClicked
+    }//GEN-LAST:event_tableProductMouseClicked
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
         String name = txtName.getText();
-        String mobileNumber = txtMobileNumber.getText();
-        String email = txtEmail.getText();
-        String password = txtPassword.getText();
-        String address = txtAddress.getText();
-        String status = (String) ComboBoxStatus.getSelectedItem();
+        String quantity = txtQuantity.getText();
+        String price = txtPrice.getText();
+        String description = txtDescription.getText();
+        String category = (String) comboBoxCategory.getSelectedItem();
+        String categoryId[] = category.split(" - ", 0);
 
         if (validateFields("new")) {
             JOptionPane.showMessageDialog(null, "All fields are requied...");
@@ -240,17 +249,16 @@ public class ManageProduct extends javax.swing.JFrame {
         } else {
             try {
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("insert into appuser (userRole, name, mobileNumber, email, password, address, status) values('Admin',?,?,?, ?,?,?)");
+                PreparedStatement ps = con.prepareStatement("insert into product (name, quantity, price, description, category_fk) values(?,?,?,?,?)");
                 ps.setString(1, name);
-                ps.setString(2, mobileNumber);
-                ps.setString(3, email);
-                ps.setString(4, password);
-                ps.setString(5, address);
-                ps.setString(6, status);
+                ps.setString(2, quantity);
+                ps.setString(3, price);
+                ps.setString(4, description);
+                ps.setString(5, categoryId[0]);
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "User Added Successfully...");
+                JOptionPane.showMessageDialog(null, "Product Added...");
                 setVisible(false);
-                new ManageUser().setVisible(true);
+                new ManageProduct().setVisible(true);
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
@@ -261,35 +269,39 @@ public class ManageProduct extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-
         String name = txtName.getText();
-        String mobileNumber = txtMobileNumber.getText();
-        String email = txtEmail.getText();
-        String address = txtAddress.getText();
-        String status = (String) ComboBoxStatus.getSelectedItem();
+        String quantity = txtQuantity.getText();
+        String price = txtPrice.getText();
+        String description = txtDescription.getText();
+        String category = (String) comboBoxCategory.getSelectedItem();
+        String categoryId[] = category.split(" - ", 0);
 
         if (validateFields("edit")) {
             JOptionPane.showMessageDialog(null, "All fields are requied...");
 
         } else {
             try {
+                if(!quantity.equals("")){
+                    totalQuantity = totalQuantity + Integer.parseInt(quantity);
+                }
                 Connection con = ConnectionProvider.getCon();
-                PreparedStatement ps = con.prepareStatement("update appuser set name=?, mobileNumber=?, email=?, address=?, status=? where appuser_pk=?");
+                PreparedStatement ps = con.prepareStatement("update product set name=?, quantity=?, price=?, description=?, category_fk=? where product_sl=?");
                 ps.setString(1, name);
-                ps.setString(2, mobileNumber);
-                ps.setString(3, email);
-                ps.setString(4, address);
-                ps.setString(5, status);
-                ps.setInt(6, appuserPk);
+                ps.setInt(2, totalQuantity);
+                ps.setString(3, price);
+                ps.setString(4, description);
+                ps.setString(5, categoryId[0]);
+                ps.setInt(6, product_sl);
                 ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "User Updated Successfully...");
+                JOptionPane.showMessageDialog(null, "Product Added...");
                 setVisible(false);
-                new ManageUser().setVisible(true);
+                new ManageProduct().setVisible(true);
 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
@@ -308,8 +320,22 @@ public class ManageProduct extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         getAllCategory();
-        
-        
+        DefaultTableModel model = (DefaultTableModel) tableProduct.getModel();
+        try {
+            Connection con = ConnectionProvider.getCon();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT * FROM product INNER JOIN category ON product.category_fk = category.category_sl;");
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getString("product_sl"), rs.getString("name"), rs.getString("quantity"), rs.getString("price"), rs.getString("description"), rs.getString("category_fk"), rs.getString(8)});
+
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        btnUpdate.setEnabled(false);
+
+
     }//GEN-LAST:event_formComponentShown
 
     /**
@@ -356,12 +382,12 @@ public class ManageProduct extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableUser;
+    private javax.swing.JLabel lblQuantity;
+    private javax.swing.JTable tableProduct;
     private javax.swing.JLabel txtCategory;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtName;

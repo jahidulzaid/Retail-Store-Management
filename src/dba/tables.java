@@ -20,13 +20,12 @@ public class tables {
         try {
             con = ConnectionProvider.getCon();
             st = con.createStatement();
-            
+
             //st.executeUpdate("INSERT INTO appuser( userRole, NAME, mobileNumber, email, password, address, STATUS) VALUES('Admin', 'Jahidul Islam', '1234567890', 'jahidul@gmail.com', 'password123',  '123 Kanchan, Vulta, Rupgonj', 'Active');");
-            
             //create table: Category
             //st.executeUpdate("CREATE TABLE category(category_sl INT AUTO_INCREMENT PRIMARY KEY, NAME VARCHAR(200))");
-            
-            st.executeUpdate("CREATE TABLE product(product_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), quantity INT, price FLOAT, description VARCHAR(500), category_fk INT);");
+            //st.executeUpdate("CREATE TABLE product(product_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200), quantity INT, price FLOAT, description VARCHAR(500), category_fk INT);");
+            st.executeUpdate("CREATE TABLE customer(customer_sl INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(200),mobileNumber VARCHAR(50), email VARCHAR(200) );");
 
             JOptionPane.showMessageDialog(null, "Table Created Successfully");
 
